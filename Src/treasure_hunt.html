@@ -2,9 +2,9 @@
 <html>
 <body  onload="setup()">
 
-<h1>Magnus Hunt: The University of Bath  online game</h1>
+<h1>Magnus Hunt: The University of Bath online game</h1>
 
-<button id="recording" onclick="play_recording(event)">Play game story</button>
+<button id="recording" onclick="play_recording(event)">Play Game Story</button>
 
 <p id="intro">
 
@@ -163,11 +163,11 @@ function process_hints(alltext) {
 function play_recording(event) {
 	if (audio_playing) {
 		document.getElementById("myAudio").pause();
-		document.getElementById("recording").innerHTML = 'Resume game story';
+		document.getElementById("recording").innerHTML = 'Resume Game Story';
 		audio_playing = false;
 	} else {
 		document.getElementById("myAudio").play();
-		document.getElementById("recording").innerHTML = 'Pause game story';
+		document.getElementById("recording").innerHTML = 'Pause Game Story';
 		audio_playing = true;
 	}
 }
@@ -261,9 +261,7 @@ function mapclicked(event) {
 		document.getElementById("welcome").style.visibility = 'visible';
 		document.getElementById("image").style.visibility = 'visible';
 		document.getElementById("intro").style.visibility = 'hidden';
-		document.getElementById("click_map_text").style.visibility = 'hidden';
 		document.getElementById("intro").innerHTML = '';
-		document.getElementById("click_map_text").innerHTML = '';
 		document.getElementById("recording").style.visibility = 'hidden';
 		
 		align_canvas();
@@ -308,8 +306,8 @@ function mapclicked(event) {
 			hints_left.push(n_hints);
 		}
 		
-		// console.log(location_labels);
-		// console.log(passwords);
+		//console.log(location_labels);
+		//console.log(passwords);
 		return;
 	}
 
@@ -391,16 +389,25 @@ function win_game() {
 function submit(event) {
 	var obj = document.getElementById("password_textbox");
 	var guess = obj.value;
-	if (guess == passwords[location_id]) {
+	if (guess.toLowerCase() == passwords[location_id].toLowerCase()) {
 		location_completed[location_id] = true;
 		location_active[location_id] = false;
 		score = score + 1000;
 		if (building_unlocked[location_id] == -1) {
-			document.getElementById("after_message").innerHTML = "It turnes out that the treasure has been hidden somewhere by the University <b>Chancellor</b>. But where should look for it?";
+			document.getElementById("after_message").innerHTML = "It turnes out that the treasure has been hidden somewhere by the University Chancellor. But where should look for it?";
 			treasure_unlocked = true;
+			document.getElementById("click_map_text").innerHTML = "Click on the map to go to a chosen location. Where could hide the treasure?";;
 		} else {
 			let next_id = building_unlocked[location_id];
-			let message = after_text[location_id] + ' Now head to <b>the ' + location_names[next_id] + '</b>';
+			
+			let message = "Click on the map to go to a chosen location. Prof. Mad Max suggest you to visit the <b>" + location_names[next_id] + "</b>";
+			if (building[next_id]!="") {
+				message += " located in the <b>" + building[next_id] + "</b> building";
+			}
+			message += " now.";
+			document.getElementById("click_map_text").innerHTML = message;
+			
+			message = after_text[location_id] + ' Now head to <b>the ' + location_names[next_id] + '</b>';
 			if (building[next_id]!="") {
 				message += " located in the <b>" + building[next_id] + "</b> building";
 			}
@@ -448,6 +455,7 @@ function submit(event) {
 		}
 	}
 	update_letters();
+	draw();
 }
 
 function give_hint(event) {
@@ -475,7 +483,7 @@ function give_hint(event) {
 		}
 	}
 	if (hints_left[location_id] == 0) {
-		document.querySelector('hint_button').disabled = true;
+		document.getElementById('hint_button').disabled = true;
 	}
 	//
 	draw();
